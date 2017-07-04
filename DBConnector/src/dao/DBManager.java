@@ -40,7 +40,7 @@ public abstract class DBManager<T> implements DBAccess<T> {
 	public abstract void update(T object) throws SQLException;
 
 	@Override
-	public abstract  T select(int id);
+	public abstract  T select(int id) throws SQLException;
 	@Override
 	public abstract ArrayList<T> select(String strSQL);
 
@@ -91,20 +91,24 @@ public abstract class DBManager<T> implements DBAccess<T> {
     }
 	
 	@Override
-	public void connect(String user, String password) throws SQLException, ClassNotFoundException{
+	public void connect(String user, String password) 
+			throws SQLException, ClassNotFoundException{
 		
 		 try {
-	        	
+	        	String uri=dbUri.replace("root", user)
+	        			.replaceAll("12345", password);
 	            // Cargar el driver MYSQL
 	            Class.forName("com.mysql.jdbc.Driver");
 	            // jdbc:mysql://ip database // database ? 
-	            connect = DriverManager
+	            /*connect = DriverManager
 	                    .getConnection("jdbc:mysql://localhost/"+ dbName +"?"
 	                            + "user=" + user + "&password=" + password);
-
+				*/
+	            connect=DriverManager.getConnection(uri);
 	            // Statements allow to issue SQL queries to the database
 	            //statement = connect.createStatement();
-	           
+		 	}catch (ClassNotFoundException e){
+		 		throw e;
 	        } catch (Exception e) {
 	        	close(); 
 	            throw e;

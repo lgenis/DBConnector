@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -96,9 +97,27 @@ public class DBMComments extends DBManager<Comments>{
 	}
 
 	@Override
-	public Comments select(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Comments select(int id) throws SQLException {
+		String strSQL = "SELECT id, myuser, email, webpage, summary, datum, comments FROM " +
+						getDbTable() + " WHERE id=?";
+		PreparedStatement preparedStatement=null;
+		Comments comment = null;
+		try{
+			preparedStatement=getConnected()
+					.prepareStatement(strSQL);
+			
+			preparedStatement.setInt(1, id);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			ArrayList<Comments> list = resultSetToComments(resultSet);
+			comment = list.get(0);
+			
+		}catch(SQLException e){
+			close();
+			throw e;
+		}
+		return comment;
 	}
 
 	@Override
@@ -121,6 +140,42 @@ public class DBMComments extends DBManager<Comments>{
 			throw new RuntimeException("El objeto que trata de "
 					+ "actualizar no tiene un id valido");
 		}
+		
+	}
+	
+	private ArrayList<Comments> resultSetToComments(ResultSet resultSet) throws SQLException{
+		ArrayList<Comments> list = new ArrayList<>();
+		
+		
+		
+		while (resultSet.next()){
+			
+			
+			//lee el resultado
+			int id=resultSet.getInt("id");
+			String user = resultSet.getString("myuser");
+			String email = resultSet.getString("email");
+			String webpage = resultSet.getString("webpage");
+			String summary = resultSet.getString("summary");
+			Date date = resultSet.getDate("datum");
+			String comments = resultSet.getString("comments");
+			
+			Comments comment=new Comments();
+			
+			comment.setId(id);
+			comment.setMyUser(user);
+			comment.setEmail(email);
+			comment.setWebpage(webpage);
+			comment.setSummary(summary);
+			comment.setDatum(date);
+			comment.setComments(comments);
+			
+			//adiciono el nuevo hashMap al ArrayList<HashMap>
+			list.add(comment);
+			
+		
+		}
+		return list;
 		
 	}
 }

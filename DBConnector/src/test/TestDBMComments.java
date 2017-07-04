@@ -48,7 +48,7 @@ public class TestDBMComments {
 				new DBMComments("localhost", "dbTest", "comments");
 		
 		Comments comments1 = getMockDBMComments();
-		
+		Comments commentsUpdated=null;
 
 		try {
 			dbManager.connect("root", "poodb");
@@ -59,22 +59,54 @@ public class TestDBMComments {
 			comments1.setDatum(new Date(123456));
 			
 			dbManager.update(comments1);
+			
+			commentsUpdated=dbManager.select(comments1.getId());
+			
 		} catch (Exception e) {
 			result = false;
 			e.printStackTrace();
 		}finally{
 			dbManager.close();
 		} 
+		Assert.assertEquals(true,result);
 		
 		Assert.assertEquals("Don update", comments1.getMyUser());
 		Assert.assertEquals("Me han actualizado", comments1.getComments());
-		Assert.assertEquals(true, comments1.getId()!=-1);
+		Assert.assertEquals(true, commentsUpdated.getId()!=-1);
 		Assert.assertEquals(new Date(123456).toString(), comments1.getDatum().toString());
 		
 	}
 	
+	@Test
+	public void testGet() {
+		boolean result = true;
+		DBMComments dbManager = 
+				new DBMComments("localhost", "dbTest", "comments");
+		Comments comments1 = getMockDBMComments();
+		Comments results = null;
+		try {
+			dbManager.connect("root", "poodb");
+			
+			dbManager.insert(comments1);
+			
+			results=dbManager.select(comments1.getId());
+
+		} catch (Exception e) {
+			result=false;
+			e.printStackTrace();
+		}finally{
+			dbManager.close();
+		} 
+		
+		Assert.assertEquals(true, result);
+		Assert.assertEquals(comments1.getMyUser(), results.getMyUser());
+		Assert.assertEquals(comments1.getComments(), results.getComments());
+	}
+	
+	
+	
 	private Comments getMockDBMComments(){
-		DBMComments dbManager=new DBMComments("localhost", "dbTest", "comments");
+		
 		Comments comments1 = new Comments();
 		comments1.setMyUser("root");
 		comments1.setEmail("root@root.com");

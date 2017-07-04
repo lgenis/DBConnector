@@ -36,8 +36,9 @@ public interface DBAccess <T>{
 	 * columnas de la tabla
 	 * @param id
 	 * @return
+	 * @throws SQLException 
 	 */
-	public T select(int id);
+	public T select(int id) throws SQLException;
 	
 	/**Ejecuta un selec segun strSQL, y retorna un ArrayList con todos los objetos
 	 * recuperados
