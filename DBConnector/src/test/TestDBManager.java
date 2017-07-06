@@ -3,6 +3,7 @@ package test;
 
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -11,9 +12,10 @@ import org.junit.Test;
 
 import dao.DBManager;
 import model.Comments;
+import model.Table;
 
 public class TestDBManager {
-	@Test
+	//@Test
 	public void testConnection(){
 		boolean result = true;
 		DBManager dbManager = new MockManager();
@@ -33,7 +35,7 @@ public class TestDBManager {
 	}
 	
 
-	@Test
+	//@Test
 	public void testDeleteAll(){
 		boolean result = true;
 		DBManager dbManager = 
@@ -52,36 +54,21 @@ public class TestDBManager {
 		Assert.assertEquals(true, result);
 	}
 	
-	
+
 	
 	public static class MockManager extends DBManager{
 		public MockManager() {
 			super("localhost", "dbtest", "comments");
 		}
 
+
 		@Override
-		public Object insert(Object object) {
+		protected Table mapDbToObject(ResultSet resultSet) throws SQLException {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		@Override
-		public void update(Object object) {
-			// TODO Auto-generated method stub
 		
-		}
-
-		@Override
-		public Object select(int id) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public ArrayList select(String strSQL) {
-			// TODO Auto-generated method stub
-			return null;
-		}
 		
 
 	}
