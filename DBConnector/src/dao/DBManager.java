@@ -116,7 +116,7 @@ public abstract class DBManager<T extends Table> implements DBAccess<T> {
 
 	@Override
 	public  T select(int id) throws SQLException{
-		String strSQL = "SELECT id, myuser, email, webpage, summary, datum, comments FROM " +
+		String strSQL = "SELECT * FROM " +
 				getDbTable() + " WHERE id=?";
 		PreparedStatement preparedStatement=null;
 		T generic = null;

@@ -15,7 +15,8 @@ import model.Comments;
 import model.Table;
 
 public class TestDBManager {
-	//@Test
+	
+	@Test
 	public void testConnection(){
 		boolean result = true;
 		DBManager dbManager = new MockManager();
@@ -35,7 +36,7 @@ public class TestDBManager {
 	}
 	
 
-	//@Test
+	@Test
 	public void testDeleteAll(){
 		boolean result = true;
 		DBManager dbManager = 
